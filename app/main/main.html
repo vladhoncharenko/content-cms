@@ -1,0 +1,51 @@
+<div ng-init="init()">
+    <p>Filters:</p>
+
+    <select ng-model="filters.channel">
+        <option ng-repeat="channel in channels" value="{{channel}}">{{channel}}</option>
+    </select>
+    <select ng-model="filters.type">
+        <option ng-repeat="type in types" value="{{type}}">{{type}}</option>
+    </select>
+    <select ng-model="filters.source">
+        <option ng-repeat="source in sources" value="{{source}}">{{source}}</option>
+    </select>
+
+    <label>With Comments Only:<input type="checkbox" ng-model="filters.withCommentsOnly"></label>
+    <label>With Modified Description Only:<input type="checkbox" ng-model="filters.withModDescOnly"></label>
+    <label>Starred Only:<input type="checkbox" ng-model="filters.starredOnly"></label>
+    <label>Published Only:<input type="checkbox" ng-model="filters.publishedOnly"></label>
+
+    <button ng-click="getContent()">Apply Filters</button>
+    <button ng-click="clearFilters()">Clear Filters</button>
+
+    <p>Content:</p>
+
+    <section data-ng-controller="MainCtrl" ng-repeat="contentItem in content">
+        <img ng-if="contentItem.Format!=='Video'" ng-srcset="{{s3Url}}{{bucket}}/{{contentItem.Channel}}/{{contentItem.Source}}/{{contentItem.FileBlobId}}"
+            width="300px" height="300px">
+        <video ng-if="contentItem.Format=='Video'" controls="controls" width="300" height="300">
+            <source src="{{s3Url}}{{bucket}}/{{contentItem.Channel}}/{{contentItem.Source}}/{{contentItem.FileBlobId}}"
+                type="video/mp4">
+        </video>
+        <p>Channel: {{contentItem.Channel}}</p>
+        <p>Type: {{contentItem.Format}}</p>
+        <p>Source: {{contentItem.Source}}</p>
+        <p>Created On: {{contentItem.CreatedOn}}</p>
+        <p>PostId: {{contentItem.PostId}}</p>
+        <label>Original Description <input type="text" ng-model="contentItem.OriginalDescription"></label>
+        <label>Modified Description <input type="text" ng-model="contentItem.ModifiedDescription"></label>
+        <label>Comments <input type="text" ng-model="contentItem.Comments"></label>
+
+        <label>Published <input type="checkbox" ng-model="contentItem.Published"></label>
+        <label>Starred <input type="checkbox" ng-model="contentItem.Starred"></label>
+
+        <button ng-click="download(s3Url+bucket+'/'+contentItem.Channel+'/'+contentItem.Source+'/'+contentItem.FileBlobId)">Download</button>
+        <button ng-click="save(contentItem)">Save</button>
+    </section>
+
+    <pagination ng-model="currentPage" total-items="contentTotal" items-per-page="numPerPage" ng-change="pageChanged()"
+        boundary-links="true">
+    </pagination>
+
+</div>

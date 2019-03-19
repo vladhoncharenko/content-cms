@@ -14,10 +14,10 @@ angular.module('myApp.main', ['ngRoute', 'ui.bootstrap'])
     $scope.bucket = "channelscontent";
     $scope.channels = ["Engineering", "Fun", "Beauty"];
     $scope.types = ["All", "Video", "Gif", "Picture"];
-    $scope.sources = ["All", "Reddit"];
+    $scope.sources = ["All", "Reddit", "Instagram"];
 
     $scope.currentPage = 1;
-    $scope.numPerPage = 3;
+    $scope.numPerPage = 15;
     $scope.contentTotal = 0;
 
     $scope.init = function () {
